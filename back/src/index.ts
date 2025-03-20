@@ -1,9 +1,19 @@
 import { serve } from "bun";
-import { Hono } from "hono";
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
 
 const app = new Hono();
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
+
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    allowMethods: ["GET,POST,PUT,PATCH,DELETE,OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization","x-auth-token"]
+  })
+);
 
 app.post("/chat", async (c) => {
   try {
@@ -16,7 +26,9 @@ app.post("/chat", async (c) => {
     //   },
     // });
 
-    const { chatHistory, msg } = await c.req.json();
+    const { chatHistory , msg } = await c.req.json();
+    console.log("chatHistory", chatHistory);
+    console.log("msg", msg);
 
     const chat = model.startChat({
       history: chatHistory,
@@ -64,10 +76,13 @@ app.post("/chat", async (c) => {
 
     // const result = await chat.sendMessage(msg.message);
     //const response = await result.response;
-    const result = await chat.sendMessage(msg);
+    const msgWithPrompt = `${prompt}\n${msg}`;
+
+    console.log("msg", msg);
+    const result = await chat.sendMessage(msgWithPrompt);
     const response = await result.response;
     const text = response.text();
-    
+
     console.log("text", text);
     return c.json({ text });
   } catch (error) {
