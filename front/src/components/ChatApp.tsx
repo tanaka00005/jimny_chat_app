@@ -14,6 +14,7 @@ function Users() {
     const updatedChatHistory = [...chatHistory, newMessageObject]; // 形式を統一
 
     setChatHistory(updatedChatHistory);
+    console.log("updatedChatHistory", updatedChatHistory);
 
     const sendData = {
       chatHistory: updatedChatHistory,

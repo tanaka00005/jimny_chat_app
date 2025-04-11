@@ -9,7 +9,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
 
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     allowMethods: ["GET,POST,PUT,PATCH,DELETE,OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization","x-auth-token"]
   })
@@ -42,22 +42,21 @@ app.post("/chat", async (c) => {
     const character = "モスモス";
 
     const prompt = `
-    あなたは植物を育成するゲームのキャラクターです。
-    このゲームでは日照度センサ、湿度センサ、温度センサ、水センサがあります。
-    センサによって得られた情報は、
-    日照度センサ：${sunlight}
-    湿度センサ：${humidity}
-    温度センサ：${temperature}
-    水センサ：${water}
-    です。
-    もし日照度、湿度、温度、水分に問題があったらアドバイスをください。
-    他のことを聞かれたらユーザーと会話をしてください。
-    
-    名前は「${character}」という植物の妖精です。
-    
-    
+    「Title: 尾道に行ってきましたー！ #絶景 #自然 #旅行  #nature #japantravel 
+User: @yuki_travel
+Likes: 261700, Plays: 6800000
+Tags: ['絶景', '自然', '旅行', 'nature', 'japantravel']
+URL: https://m.tiktok.com/v/7381023303550373121」
 
-    植物の種類は「${species}」です。
+ここで示した場所を次の形式で返答してください:
+  \`\`\`jsonschema
+  {
+    "area":"地名”,
+    "located
+  }
+  \`\`\`
+  
+
  
     `;
     // 植物の種類は「${species}」です。
